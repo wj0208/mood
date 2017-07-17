@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>Jumbotron Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <style>
+        .userheadpic{
+            width: 165px;
+            height: 165px;
+        }
+        .headpic{
+            width: 80px;
+            height: 80px;
+        }
+        .headpics{
+            width: 50px;
+            height: 50px;
+        }
+        a{
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .comment{
+            border: 1px solid #c4e3f3;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #alert,.pubbtn{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<% include header.ejs%>
+<!--个人资料-->
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-2">
+                <div class="userheadpic">
+                    <img src="images/head.png" width="100%" height="100%">
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <h2 class="text-primary"><%=username%></h2>
+                <p>Use it as a starting point to create something more unique.</p>
+            </div>
+            <div class="col col-md-4"></div>
+        </div>
+    </div>
+</div>
+<!--说说部分-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="comment">
+                <form method="post" enctype="multipart/form-data">
+                    <textarea class="form-control" rows="4" placeholder="书写一下此刻的心情吧" id="mood" name="mood"></textarea>
+                    <br>
+                    <div class="text-right"><button type="button" class="btn btn-default btn-info" id="pub">发表</button></div>
+                </form>
+            </div>
+            <h3>全部动态</h3>
+            <%if(mood!=null){%>
+            <%for(var i = mood.length-1;i>=0;i--){%>
+            <div class="comment">
+                <div class="row">
+                    <div class="col col-md-2">
+                        <div class="headpic">
+                            <img src="images/head.png" width="100%" height="100%">
+                        </div>
+                    </div>
+                    <div class="col col-md-6">
+                        <h2 class="text-primary"><%=mood[i].username%></h2>
+                        <p style="color: #ccc"><%=mood[i].publishtime%></p>
+                    </div>
+                    <div class="col col-md-4"></div>
+                </div>
+                <p><%=mood[i].content%></p>
+                <p class="text-right">
+                    <a href="#"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </p>
+                <hr>
+                <!--评论-->
+
+                <div class="row">
+                    <div class="col col-md-12">
+                        <form method="post" enctype="multipart/form-data"></form>
+                        <textarea class="form-control com" rows="2" placeholder="评论" name="com"></textarea>
+                        <br>
+                        <p style="display: none" class="moodId"><%=mood[i]._id%></p>
+                        <div class="text-right pubbtn"><button type="button" class="btn btn-default btn-info">发表</button></div>
+                    </div>
+                </div>
+                <div class="alert alert-danger" id="alert"></div>
+            </div>
+            <%}%>
+            <%}else{%>
+            <div>您暂时还没有发表任何说说哟，自己赶紧先说两句吧</div>
+            <%}%>
+        </div>
+
+        <div class="col-md-2">
+        </div>
+    </div>
+
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    $(".com").focus(function () {
+        $(".pubbtn").hide();
+        $(this).parent().find(".pubbtn").show();
+    })
+    $("#pub").click(function () {
+        if($("#mood").val()!=""){
+            $.post("/doPublish",{
+                "content": $("#mood").val()
+            },function(result){
+                if(result == "-1"){
+                    $("#alert").text("发表失败，请联系管理员！").fadeIn();
+                }else if(result == "1"){
+                    location = "/index";
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

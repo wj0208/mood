@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>Jumbotron Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+
+    <style>
+        #alert{
+            display: none;
+        }
+        body{
+            padding: 0;
+        }
+        .bg{
+            z-index: -1;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: url("images/bg.jpg") left top;
+            background-size:cover;
+        }
+        .hand{
+            height: 100%;
+            background: url("images/hand.png") left top;
+            background-size:50% 100%;
+        }
+        footer{
+            width: 100%;
+            position: absolute;
+            bottom: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<br>
+<br>
+<br>
+<br>
+    <div class="container" style="color:#fff">
+        <h1>视野空间</h1>
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;欢迎您的加入</h2>
+        <div class="row hand">
+            <div class="col-md-6 text-danger">
+
+            </div>
+            <div class="col-md-6 bg-info">
+                <form enctype="multipart/form-data" method="post">
+                    <div class="text-center"><h2 class="text-info">用户登录</h2></div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">用户名</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">密码</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-default" id="btn">登录</button>
+                    </div>
+                    <div class="form-group text-right" style="color:#000">
+                       没有账号？立即<a href="/register">注册</a>
+                    </div>
+                </form>
+                <div class="alert alert-danger" id="alert"></div>
+            </div>
+        </div>
+    </div>
+
+
+<footer>
+    <p class="text-center" style="width: 100%;">反馈建议 | 官方空间 | 空间活动 | 空间应用  | 社交组件 | 应用侵权投诉 | Complaint Guidelines</p>
+    <p class="text-center" style="width: 100%;">&copy; 2016 Company, Inc.</p>
+</footer>
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    $("input").focus(function(){
+        $("#alert").fadeOut();
+    })
+    $("#btn").click(function(){
+        $.post("/doLogin",{
+            "username": $("#username").val(),
+            "password":$("#password").val()
+        },function(result){
+            if(result == "-1"){
+                $("#alert").text("用户名不存在，请重新填写！").fadeIn();
+            }else if(result == "-2"){
+                $("#alert").text("密码不正确，重新输入！").fadeIn();
+            }else if(result == "1"){
+                location = "/index";
+            }
+        })
+    })
+</script>
+
+</body>
+</html>
